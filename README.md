@@ -1,23 +1,13 @@
 更新安装脚本为rico收费版安装脚本，更新镜像hulisang/v2ray_v3:go_dev,原镜像hulisang/v2ray_v3:go还可以使用,增加自定义DNS，增加数据库连接（实验性，多半不行，rico免费版内核限制）
-避免脚本出现问题，推荐docker run方式
 
 使用方法：
 
 ```
-docker run -d --name=v2ray \
--e speedtest=6  -e api_port=2333 -e usemysql=0 -e downWithPanel=0 -e LDNS: "1.1.1.1" \
--e node_id=id -e sspanel_url=网站WebAPI地址 -e key=Sspanel_Mu_Key  -e MYSQLHOST=数据库ip地址  \
--e MYSQLDBNAME="demo_dbname" -e MYSQLUSR="demo_user" -e MYSQLPASSWD="demo_dbpassword" -e MYSQLPORT=3306 \
---log-opt max-size=10m --log-opt max-file=5 \
---network=host --restart=always \
-hulisang/v2ray_v3:go_dev
-```
-```
-docker run -d --name=caddy \
--e ACME_AGREE=true -e V2RAY_DOMAIN=xxxx.com -e V2RAY_PATH=/xxxxx -e V2RAY_EMAIL=xxxx@outlook.com -e V2RAY_PORT=10550 -e V2RAY_OUTSIDE_PORT=443 \
---log-opt max-size=10m --log-opt max-file=5 \
---network=host --restart=always \
-hulisang/v2ray_v3:caddy
+mkdir v2ray-agent  &&  \
+cd v2ray-agent && \
+curl https://raw.githubusercontent.com/hulisang/v2ray-sspanel-v3-mod_Uim-plugin/dev/install.sh -o install.sh && \
+chmod +x install.sh && \
+bash install.sh
 ```
 path极力不推荐使用/v2ray了（大家懂的）
 
