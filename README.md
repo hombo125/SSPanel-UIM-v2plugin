@@ -1,6 +1,7 @@
 ## 更新安装脚本
 
-## 更新镜像hulisang/v2ray_v3:go_pay,原镜像hulisang/v2ray_v3:go还可以使用
+## 更新镜像
+升级核心,原镜像hulisang/v2ray_v3:go还可以使用
 
 ## 增加自定义DNS，增加数据库连接
 测试通过
