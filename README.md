@@ -76,9 +76,9 @@ v2ray 后端 kcp、tcp、ws 都是多用户共用一个端口。
 
 额外参数使用 "|" 来分隔。
 
-- [x] **path** 为访问路径
-- [x] **server** 为 TLS 域名和用于当节点藏在 CDN 后时覆盖第一个地址
-- [x] **host** 用于定义 headers
+- **path** 为访问路径
+- **server** 为 TLS 域名和用于当节点藏在 CDN 后时覆盖第一个地址
+- **host** 用于定义 headers
 配置示例：
 ```
 // ws
