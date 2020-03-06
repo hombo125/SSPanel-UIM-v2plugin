@@ -17,6 +17,13 @@ bash install.sh
 ```
 path极力不推荐使用/v2ray了（大家懂的）
 
+中转用法是在前端节点地址后面加上|outside_port=中转端口|relayserver=中转ip
+
+// ws完整写法示例：
+```
+xxxxx.com;10550;16;ws;;path=/xxxxx|host=oxxxx.com|outside_port=中转端口|relayserver=中转ip
+```
+其他写法自行添加
 
 
 感恩原作者rico辛苦付出
