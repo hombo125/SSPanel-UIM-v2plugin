@@ -1,4 +1,8 @@
-更新安装脚本为rico收费版安装脚本，更新镜像hulisang/v2ray_v3:go_dev,原镜像hulisang/v2ray_v3:go还可以使用,增加自定义DNS，增加数据库连接（实验性，多半不行，rico免费版内核限制）
+###更新v2ray核心到4.22
+###更新安装脚本
+###更新镜像hulisang/v2ray_v3:go_pay,原镜像hulisang/v2ray_v3:go还可以使用
+###增加自定义DNS，增加数据库连接
+###支持SSRPanel对接
 
 使用方法：
 
@@ -54,7 +58,43 @@ v2ray 后端 kcp、tcp、ws 都是多用户共用一个端口。
 - [x] aes-256-gcm
 - [x] aes-128-gcm
 - [x] chacha20-poly1305 或称 chacha20-ietf-poly1305
+- [x] xchacha20-ietf-poly1305
+##作为 SS + WS(tls) 配置，单端口
+###节点配置
+添加一个节点
 
+节点类型为 Shadowsocks - V2Ray-Plugin
+
+节点地址写法
+以下是节点地址的基本格式：
+
+> 没有CDN的域名或者IP;外部端口;;协议层;附加协议;额外参数
+
+**额外参数：**
+
+额外参数使用 "|" 来分隔。
+
+- [x] **path** 为访问路径
+- [x] **server** 为 TLS 域名和用于当节点藏在 CDN 后时覆盖第一个地址
+- [x] **host** 用于定义 headers
+配置示例：
+```
+// ws
+没有CDN的域名或IP;端口;;ws;;path=/hls/cctv5phd.m3u8
+
+// ws + tls
+没有CDN的域名或IP;443;;ws;tls;path=/hls/cctv5phd.m3u8|server=TLS域名
+
+// ws+tls+中转
+
+没有CDN的域名或IP;443;;ws;tls;path=/hls/cctv5phd.m3u8|server=TLS域名|host=TLS域名|relayserver=中转地址|outside_port=中转端口
+
+// ws + tls+CDN
+没有CDN的域名或IP;443;;ws;tls;path=/hls/cctv5phd.m3u8|server=这里写CDN的域名
+
+// obfs-http
+没有CDN的域名或IP;端口;;obfs;http;
+```
 ## 作为 V2ray 后端
 
 这里面板设置是节点类型v2ray, 普通端口。 v2ray的API接口默认是2333
@@ -135,201 +175,3 @@ xxxxx.com;非0;16;kcp;dtls;
 xxxxx.com;非0;16;kcp;wireguard;
 ~~~
 
-### [可选] 安装 BBR
-
-看 [Rat的](https://www.moerats.com/archives/387/)
-OpenVZ 看这里 [南琴浪](https://github.com/tcp-nanqinlang/wiki/wiki/lkl-haproxy)
-
-~~~
-wget -N --no-check-certificate "https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
-~~~
-
-Ubuntu 18.04 魔改 BBR 暂时有点问题，可使用以下命令安装：
-
-~~~
-wget -N --no-check-certificate "https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh"
-apt install make gcc -y
-sed -i 's#/usr/bin/gcc-4.9#/usr/bin/gcc#g' '/root/tcp.sh'
-chmod +x tcp.sh && ./tcp.sh
-~~~
-### [可选] 增加swap
-整数是M
-~~~
-wget https://www.moerats.com/usr/shell/swap.sh && bash swap.sh
-~~~
-
-### [推荐] 脚本部署
-
-#### Docker-compose 安装 
-这里一直保持最新版
-~~~
-mkdir v2ray-agent  &&  \
-cd v2ray-agent && \
-curl https://raw.githubusercontent.com/hulisang/v2ray-sspanel-v3-mod_Uim-plugin/master/install.sh -o install.sh && \
-chmod +x install.sh && \
-bash install.sh
-~~~
-
-
-#### 普通安装
-##### 安装v2ray 
-修改了官方安装脚本
-用脚本指定面板信息，请务必删除原有的config.json, 否则不会更新config.json
-
-安装（这里保持最新版本）
-~~~
-bash <(curl -L -s  https://raw.githubusercontent.com/rico93/v2ray-core/master/release/install-release.sh) --panelurl https://xxxx --panelkey xxxx --nodeid 21
-~~~
-
-后续升级（如果要更新到最新版本）
-~~~
-bash <(curl -L -s  https://raw.githubusercontent.com/rico93/v2ray-core/master/release/install-release.sh)
-~~~
-
-
-如果要强制安装某个版本
-
-~~~
-bash <(curl -L -s  https://raw.githubusercontent.com/rico93/v2ray-core/master/release/install-release.sh) -f --version 4.12.0
-~~~
-
-
-config.json Example 
-
-~~~
-{
-  "api": {
-    "services": [
-      "HandlerService",
-      "LoggerService",
-      "StatsService"
-    ],
-    "tag": "api"
-  },
-  "inbounds": [{
-    "listen": "127.0.0.1",
-    "port": 2333,
-    "protocol": "dokodemo-door",
-    "settings": {
-      "address": "127.0.0.1"
-    },
-    "tag": "api"
-  }
-  ],
-  "log": {
-    "access": "/var/log/v2ray/access.log",
-    "error": "/var/log/v2ray/error.log",
-    "loglevel": "info"
-  },
-  "outbounds": [{
-    "protocol": "freedom",
-    "settings": {}
-  },
-    {
-      "protocol": "blackhole",
-      "settings": {},
-      "tag": "blocked"
-    }
-  ],
-  "policy": {
-    "levels": {
-      "0": {
-        "connIdle": 300,
-        "downlinkOnly": 5,
-        "handshake": 4,
-        "statsUserDownlink": true,
-        "statsUserUplink": true,
-        "uplinkOnly": 2
-      }
-    },
-    "system": {
-      "statsInboundDownlink": false,
-      "statsInboundUplink": false
-    }
-  },
-  "reverse": {},
-  "routing": {
-    "settings": {
-      "rules": [{
-        "ip": [
-          "0.0.0.0/8",
-          "10.0.0.0/8",
-          "100.64.0.0/10",
-          "127.0.0.0/8",
-          "169.254.0.0/16",
-          "172.16.0.0/12",
-          "192.0.0.0/24",
-          "192.0.2.0/24",
-          "192.168.0.0/16",
-          "198.18.0.0/15",
-          "198.51.100.0/24",
-          "203.0.113.0/24",
-          "::1/128",
-          "fc00::/7",
-          "fe80::/10"
-        ],
-        "outboundTag": "blocked",
-        "protocol": [
-          "bittorrent"
-        ],
-        "type": "field"
-      },
-        {
-          "inboundTag": [
-            "api"
-          ],
-          "outboundTag": "api",
-          "type": "field"
-        },
-        {
-          "domain": [
-            "regexp:(api|ps|sv|offnavi|newvector|ulog\\.imap|newloc)(\\.map|)\\.(baidu|n\\.shifen)\\.com",
-            "regexp:(.+\\.|^)(360|so)\\.(cn|com)",
-            "regexp:(.?)(xunlei|sandai|Thunder|XLLiveUD)(.)"
-          ],
-          "outboundTag": "blocked",
-          "type": "field"
-        }
-      ]
-    },
-    "strategy": "rules"
-  },
-  "stats": {},
-  "sspanel": {
-    "nodeId": 20,
-    "checkRate": 60,
-    "SpeedTestCheckRate": 6,
-    "panelUrl": "xxxx",
-    "panelKey": "xxxx"
-  }
-}
-~~~
-##### 安装caddy
-
-一键安装 caddy 和cf ddns tls插件
-
-~~~
-curl https://getcaddy.com | bash -s dyndns,tls.dns.cloudflare
-~~~
-
-Caddyfile 
-
-自行修改，或者设置对应环境变量
-
-~~~
-{$V2RAY_DOMAIN}:{$V2RAY_OUTSIDE_PORT}
-{
-  root /srv/www
-  log ./caddy.log
-  proxy {$V2RAY_PATH} 127.0.0.1:{$V2RAY_PORT} {
-    websocket
-    header_upstream -Origin
-  }
-  gzip
-  tls {$V2RAY_EMAIL} {
-    protocols tls1.0 tls1.2
-    # remove comment if u want to use cloudflare ddns
-    # dns cloudflare
-  }
-}
-~~~
