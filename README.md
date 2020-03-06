@@ -1,8 +1,12 @@
-###更新v2ray核心到4.22
-###更新安装脚本
-###更新镜像hulisang/v2ray_v3:go_pay,原镜像hulisang/v2ray_v3:go还可以使用
-###增加自定义DNS，增加数据库连接
-###支持SSRPanel对接
+##更新v2ray核心到4.22
+
+##更新安装脚本
+
+##更新镜像hulisang/v2ray_v3:go_pay,原镜像hulisang/v2ray_v3:go还可以使用
+
+##增加自定义DNS，增加数据库连接
+
+##支持SSRPanel对接
 
 使用方法：
 
