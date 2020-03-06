@@ -1,12 +1,10 @@
-## 更新v2ray核心到4.22
-
 ## 更新安装脚本
 
 ## 更新镜像hulisang/v2ray_v3:go_pay,原镜像hulisang/v2ray_v3:go还可以使用
 
 ## 增加自定义DNS，增加数据库连接
 
-## 支持SSRPanel对接
+## 支持对接SSRPanel
 
 使用方法：
 
@@ -63,8 +61,8 @@ v2ray 后端 kcp、tcp、ws 都是多用户共用一个端口。
 - [x] aes-128-gcm
 - [x] chacha20-poly1305 或称 chacha20-ietf-poly1305
 - [x] xchacha20-ietf-poly1305
-##作为 SS + WS(tls) 配置，单端口
-###节点配置
+## 作为 SS + WS(tls) 配置，单端口
+### 节点配置
 添加一个节点
 
 节点类型为 Shadowsocks - V2Ray-Plugin
