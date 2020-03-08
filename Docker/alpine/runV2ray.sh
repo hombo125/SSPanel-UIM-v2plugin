@@ -76,7 +76,7 @@ then
 fi
 if [ ! -z "${CF_Email}" ]
 then
-  sed -i "s|\"rico93@outlxxxxxxxxxx.com\"|\"${CF_Email}\"|g" "/etc/v2ray/config.json"
+  sed -i "s|\"v2rayV3@test.com\"|\"${CF_Email}\"|g" "/etc/v2ray/config.json"
 
 fi
 
@@ -89,6 +89,24 @@ fi
 if [ ! -z "${UseIP}" ]
 then
   sed -i "s|\"UseIP\"|\"${UseIP}\"|g" "/etc/v2ray/config.json"
+
+fi
+
+if [ ! -z "${MUREGEX}" ]
+then
+  sed -i "s|\"%5m%id.%suffix\"|\"${MUREGEX}\"|g" "/etc/v2ray/config.json"
+
+fi
+
+if [ ! -z "${MUSUFFIX}" ]
+then
+  sed -i "s|\"microsoft.com\"|\"${MUSUFFIX}\"|g" "/etc/v2ray/config.json"
+
+fi
+
+if [ ! -z "${ProxyTCP}" ]
+then
+  sed -i "s|\"proxy_tcp\": 0|\"proxy_tcp\": ${ProxyTCP}|g" "/etc/v2ray/config.json"
 
 fi
 
